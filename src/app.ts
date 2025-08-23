@@ -20,10 +20,11 @@ const upload = multer({ storage });
 
 // Ruta para subir imágenes
 app.post('/upload', upload.single('image'), async (req, res) => {
-	req.body;
 	try {
-		const fileName = `${Date.now()}.webp`;
-		const outputPath = path.join(UPLOADS_DIR, fileName);
+		const { filename } = req.body;
+
+		const finalName = filename ? `${filename}.webp` : `${Date.now()}.webp`;
+		const outputPath = path.join(UPLOADS_DIR, finalName);
 
 		// Procesar imagen: redimensionar y convertir a webp
 		await sharp(req.file?.buffer)
@@ -31,10 +32,9 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 			.webp({ quality: 80 })
 			.toFile(outputPath);
 
-		// Aquí luego puedes subir a Supabase/Backblaze
 		res.json({
 			success: true,
-			url: `/${envs.UPLOAD_DIR}/${fileName}`, // url local por ahora
+			url: `/${envs.UPLOAD_DIR}/${finalName}`,
 		});
 	} catch (err) {
 		console.error(err);
