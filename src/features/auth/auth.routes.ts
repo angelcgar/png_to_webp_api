@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { generateToken } from '../utils/jwt';
+import { generateToken } from '../../utils/jwt';
 
 const router: Router = Router();
 
