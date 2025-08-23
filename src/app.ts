@@ -42,6 +42,48 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 	}
 });
 
+// Endpoint: subir VARIAS imágenes
+app.post('/upload/many', upload.array('images', 3), async (req, res) => {
+	try {
+		const { filenames } = req.body; // puede ser un array desde el cliente
+		const results = [];
+
+		for (let i = 0; i < Number(req.files?.length); i++) {
+			//! Bug: TypeScript no entiende que req.files existe
+			// @ts-ignore
+			const file = req.files[i];
+			const customName = Array.isArray(filenames) ? filenames[i] : null;
+			const finalName = customName
+				? `${customName}.webp`
+				: `${Date.now()}_${i}.webp`;
+
+			const outputPath = path.join(UPLOADS_DIR, finalName);
+
+			await sharp(file.buffer)
+				.resize(800)
+				.webp({ quality: 80 })
+				.toFile(outputPath);
+
+			results.push({
+				original: file.originalname,
+				savedAs: finalName,
+				url: `/uploads/${finalName}`,
+			});
+		}
+
+		res.json({
+			success: true,
+			count: results.length,
+			files: results,
+		});
+	} catch (err) {
+		console.error(err);
+		res
+			.status(500)
+			.json({ success: false, error: 'Error procesando imágenes' });
+	}
+});
+
 // Servir imágenes estáticas desde /uploads
 app.use(`/${envs.UPLOAD_DIR}`, express.static(UPLOADS_DIR));
 
