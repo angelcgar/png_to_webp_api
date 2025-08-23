@@ -1,0 +1,53 @@
+### Node.js ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Binaries
+*.exe
+*.out
+*.app
+.DS_Store
+Thumbs.db
+
+### TypeScript ###
+*.tsbuildinfo
+
+### Build outputs ###
+dist/
+build/
+out/
+uploads/
+
+### Env files ###
+.env
+.env.*
+
+### Logs ###
+logs/
+*.log
+
+### IDE files ###
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+### Jest ###
+coverage/
+*.lcov
+
+### Docker ###
+.dockerignore
+docker-compose.override.yml
+
+### Misc ###
+.temp/
+.cache/
+.nyc_output/
+*.swp
