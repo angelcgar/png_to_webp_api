@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 
@@ -82,6 +82,20 @@ app.post('/upload/many', upload.array('images', 3), async (req, res) => {
 			.status(500)
 			.json({ success: false, error: 'Error procesando imágenes' });
 	}
+});
+
+function authMiddleware(req: Request, res: Response, next: NextFunction) {
+	const token = req.headers['authorization'];
+	if (token === 'Bearer MI_TOKEN_SECRETO') {
+		return next();
+	}
+	return res.status(401).json({ error: 'Unauthorized' });
+}
+
+app.get('/images', authMiddleware, (req, res) => {
+	const files = fs.readdirSync(path.join(process.cwd(), 'uploads'));
+	const urls = files.map((file) => `/uploads/${file}`);
+	res.json({ count: urls.length, files: urls });
 });
 
 // Servir imágenes estáticas desde /uploads
