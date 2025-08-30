@@ -49,7 +49,7 @@ export const uploadImage = async (req: Request, res: Response) => {
 
 		res.json({
 			success: true,
-			url: `/${envs.UPLOAD_DIR}/${finalName}`,
+			url: `/api/images/${finalName}`,
 		});
 	} catch (err) {
 		console.error(err);
