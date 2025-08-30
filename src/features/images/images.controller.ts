@@ -34,7 +34,7 @@ export const sendImageByName = (req: Request, res: Response) => {
 	res.sendFile(imagePath);
 };
 
-export const uploadImage = async (req: Request, res: Response) => {
+export const uploadImageFile = async (req: Request, res: Response) => {
 	try {
 		const { filename } = req.body;
 

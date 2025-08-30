@@ -17,8 +17,12 @@ router.get('/', authMiddleware, ImagesController.listImages);
 // Ruta para obtener una imagen
 router.get('/:imageName', ImagesController.sendImageByName);
 
-// Ruta para subir imágenes
-router.post('/upload', upload.single('image'), ImagesController.uploadImage);
+// Ruta para subir imágenes en archivo
+router.post(
+	'/upload-file',
+	upload.single('image'),
+	ImagesController.uploadImageFile,
+);
 
 // Endpoint: subir VARIAS imágenes
 router.post(
