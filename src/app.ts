@@ -8,7 +8,13 @@ const app = express();
 const port = envs.PORT ?? 3000;
 
 // Middlewares
-app.use(cors());
+app.use(
+	cors({
+		origin: envs.CORS_ORIGIN,
+		methods: ['GET', 'POST', 'PUT', 'DELETE'],
+		allowedHeaders: ['Content-Type', 'Authorization'],
+	}),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

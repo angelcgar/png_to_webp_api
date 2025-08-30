@@ -24,6 +24,7 @@ uploads/
 ### Env files ###
 .env
 .env.*
+!.env.template
 
 ### Logs ###
 logs/
