@@ -16,6 +16,24 @@ export const listImages = (_req: Request, res: Response) => {
 	res.json({ count: urls.length, files: urls });
 };
 
+export const sendImageByName = (req: Request, res: Response) => {
+	const { imageName } = req.params;
+
+	if (!imageName) {
+		res.status(404).json({ error: 'Imagen no recibida' });
+		return;
+	}
+
+	// Devolver la imagen solicitada
+	const imagePath = path.join(UPLOADS_DIR, imageName);
+	if (!fs.existsSync(imagePath)) {
+		res.status(404).json({ error: 'Imagen no encontrada' });
+		return;
+	}
+
+	res.sendFile(imagePath);
+};
+
 export const uploadImage = async (req: Request, res: Response) => {
 	try {
 		const { filename } = req.body;

@@ -11,7 +11,11 @@ const router: Router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// Ruta para listar imágenes, solo para usuarios autenticados
 router.get('/', authMiddleware, ImagesController.listImages);
+
+// Ruta para obtener una imagen
+router.get('/:imageName', ImagesController.sendImageByName);
 
 // Ruta para subir imágenes
 router.post('/upload', upload.single('image'), ImagesController.uploadImage);
