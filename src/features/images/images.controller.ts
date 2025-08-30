@@ -57,6 +57,52 @@ export const uploadImageFile = async (req: Request, res: Response) => {
 	}
 };
 
+export const uploadImageURL = async (req: Request, res: Response) => {
+	try {
+		const { imageUrl, filename } = req.body;
+		console.log({ imageUrl, filename });
+		if (!imageUrl) {
+			res
+				.status(400)
+				.json({ success: false, error: 'URL de la imagen requerida' });
+			return;
+		}
+
+		const response = await fetch(imageUrl);
+		if (!response.ok) {
+			res.status(400).json({
+				success: false,
+				error: 'No se pudo descargar la imagen desde la URL proporcionada',
+			});
+			return;
+		}
+
+		// Convertimos la respuesta en un buffer para sharp
+		const imageBuffer = Buffer.from(await response.arrayBuffer());
+
+		// Nombre final
+		const finalName = filename ? `${filename}.webp` : `${Date.now()}.webp`;
+		const outputPath = path.join(UPLOADS_DIR, finalName);
+
+		// Procesar imagen con sharp
+		await sharp(imageBuffer)
+			.resize(800)
+			.webp({ quality: 80 })
+			.toFile(outputPath);
+
+		res.json({
+			success: true,
+			url: `/api/images/${finalName}`,
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({
+			success: false,
+			error: 'Error procesando imagen desde URL, usa { imageUrl: URL }',
+		});
+	}
+};
+
 export const uploadMany = async (req: Request, res: Response) => {
 	try {
 		const { filenames } = req.body; // puede ser un array desde el cliente

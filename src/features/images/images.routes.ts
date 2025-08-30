@@ -24,6 +24,9 @@ router.post(
 	ImagesController.uploadImageFile,
 );
 
+// Ruta para subir imágenes desde URL
+router.post('/upload-url', ImagesController.uploadImageURL);
+
 // Endpoint: subir VARIAS imágenes
 router.post(
 	'/upload/many',
